@@ -10,6 +10,6 @@ namespace AuthServer.Core.Configuration
     {
         public string Id { get; set; } = default!;
         public string Secret { get; set; } = default!;
-        public List<string> Audiences { get; set; } = default!;
+        public List<string> Audiences { get; set; }
     }
 }
