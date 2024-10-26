@@ -14,7 +14,7 @@ namespace SharedLib.Dtos
         public int StatusCode { get; private set; }
 
 
-        public ErrorDto Error { get; private set; }
+        public ErrorDto Error { get; private set; } 
 
         [JsonIgnore]
         public bool  IsSuccessful { get; set; }
