@@ -1,3 +1,5 @@
+using AppFirst.API.Requirements;
+using Microsoft.AspNetCore.Authorization;
 using SharedLib.Configurations;
 using SharedLib.Extensions;
 
@@ -15,6 +17,21 @@ var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<CustomTo
 
 builder.Services.AddCustomTokenAuth(tokenOptions);
 
+builder.Services.AddSingleton<IAuthorizationHandler, BirthDateRequirementHandler>(); //PolicyBased Authorization
+
+
+builder.Services.AddAuthorization(configure =>
+{
+    configure.AddPolicy("istanbulPolicy", policy => //ClaimBased Authorization
+    {
+        policy.RequireClaim("city", "istanbul");
+    });
+
+    configure.AddPolicy("AgePolicy", policy => //PolicyBased Authorization
+    {
+        policy.Requirements.Add(new BirthDateRequirement(18));
+    });
+});
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

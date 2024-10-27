@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace AppFirst.API.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class StockController : ControllerBase
     {
+        [Authorize(Roles = "admin,manager", Policy = "istanbulPolicy")]
+        [Authorize(Policy = "AgePolicy")]
         [HttpGet]
         public IActionResult GetStock()
         {
