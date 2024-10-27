@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace AuthServer.Data.Repositories
 {
-    public class GenericRepository<T>(DbContext context) : IGenericRepository<T> where T : class
+    public class GenericRepository<T>(AppDbContext context) : IGenericRepository<T> where T : class
     {
-        private readonly DbContext _context = context;
+        private readonly AppDbContext _context = context;
         private readonly DbSet<T> _dbSet = context.Set<T>();
 
         public async Task AddAsync(T Entity)
