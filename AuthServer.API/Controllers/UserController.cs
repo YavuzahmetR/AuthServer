@@ -20,7 +20,7 @@ namespace AuthServer.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
         {
-            throw new CustomException("Database Error Occured");
+            //throw new CustomException("Database Error Occured");
             return ActionResultInstance(await _userService.CreateUserAsync(createUserDto));
         }
 
@@ -33,5 +33,11 @@ namespace AuthServer.API.Controllers
             return ActionResultInstance(await _userService.GetUserByNameAsync(HttpContext.User.Identity.Name)); //Extracts the "name" claim in the token payload.
             
         }
+        [HttpPost("CreateUserRolesAsync/{userName}")]
+        public async Task<IActionResult> CreateUserRolesAsync(string userName)
+        {
+            return ActionResultInstance(await _userService.CreateUserRolesAsync(userName));
+        }
+
     }
 }
