@@ -36,18 +36,22 @@ namespace AuthServer.Service.Service
         }
 
 
-        private IEnumerable<Claim> GetClaims(UserApp user, List<string> audiences)
+        private async Task<IEnumerable<Claim>> GetClaims(UserApp user, List<string> audiences)
         {
+            var userRoles = await _userManager.GetRolesAsync(user);
+
             var userlist = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier,user.Id),
                 new Claim(ClaimTypes.Name,user.UserName!),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email!),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-
+                new Claim("city",user.City),
+                new Claim("birth-date",user.BirthDate.ToShortDateString())
             };
 
             userlist.AddRange(audiences.Select(x => new Claim(JwtRegisteredClaimNames.Aud, x)));
+            userlist.AddRange(userRoles.Select(x => new Claim(ClaimTypes.Role, x)));
             return userlist;
         }
 
@@ -78,7 +82,7 @@ namespace AuthServer.Service.Service
                  issuer: _tokenOption.Issuer,
                  expires: accessTokenExpiration,
                  notBefore: DateTime.Now,
-                 claims: GetClaims(user, _tokenOption.Audience),
+                 claims: GetClaims(user, _tokenOption.Audience).Result,
                  signingCredentials: signingCredentials
                 );
             var handler = new JwtSecurityTokenHandler();
